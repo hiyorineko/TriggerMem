@@ -105,34 +105,46 @@ public class MainActivity extends Activity implements View.OnTouchListener{
                 case R.id.cri:
                     if(con[0]<16){
                         con[0]++;
-                    }else{
-                        con[0]=0;
+                        con[5]++;
+                    }else {
+                        con[0] = 0;
+                        con[5] -= 16;
                     }
                     cric.setText(String.valueOf(con[0]));
+                    allc.setText(String.valueOf(con[5]));
                     break;
                 case R.id.stand:
                     if(con[1]<16){
                         con[1]++;
-                    }else{
-                        con[1]=0;
+                        con[5]++;
+                    }else {
+                        con[1] = 0;
+                        con[5] -= 16;
                     }
                     stac.setText(String.valueOf(con[1]));
+                    allc.setText(String.valueOf(con[5]));
                     break;
                 case R.id.heal:
                     if(con[2]<4){
                         con[2]++;
-                    }else{
-                        con[2]=0;
+                        con[5]++;
+                    }else {
+                        con[2] = 0;
+                        con[5] -= 4;
                     }
                     healc.setText(String.valueOf(con[2]));
+                    allc.setText(String.valueOf(con[5]));
                     break;
                 case R.id.draw:
                     if(con[3]<16){
                         con[3]++;
+                        con[5]++;
                     }else{
                         con[3]=0;
+                        con[5] -= 16;
                     }
                     drawc.setText(String.valueOf(con[3]));
+                    allc.setText(String.valueOf(con[5]));
                     break;
                 case R.id.kanga:
                     if(con[4]<4){
@@ -141,14 +153,6 @@ public class MainActivity extends Activity implements View.OnTouchListener{
                         con[4]=0;
                     }
                     kanc.setText(String.valueOf(con[4]));
-                    break;
-                case R.id.all:
-                    if(con[5]<16){
-                        con[5]++;
-                    }else{
-                        con[5]=0;
-                    }
-                    allc.setText(String.valueOf(con[5]));
                     break;
             }
             return false;
@@ -165,89 +169,109 @@ public class MainActivity extends Activity implements View.OnTouchListener{
                     case R.id.cri:
                         // Y軸の移動距離が大きすぎる場合
                         if (Math.abs(event1.getY() - event2.getY()) > SWIPE_MAX_OFF_PATH) {
+                            con[5]-=con[0];
                             con[0]=0;
                             cric.setText(String.valueOf(con[0]));
+                            allc.setText(String.valueOf(con[5]));
                             break;
                         }
                         // 開始位置から終了位置の移動距離が指定値より大きい
                         // X軸の移動速度が指定値より大きい
                         else if (event1.getX() - event2.getX() > SWIPE_MIN_DISTANCE && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
+                            con[5]-=con[0];
                             con[0]=0;
                             cric.setText(String.valueOf(con[0]));
+                            allc.setText(String.valueOf(con[5]));
                             break;
-
                         }
                         // 終了位置から開始位置の移動距離が指定値より大きい
                         // X軸の移動速度が指定値より大きい
                         else if (event2.getX() - event1.getX() > SWIPE_MIN_DISTANCE && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
+                            con[5]-=con[0];
                             con[0]=0;
                             cric.setText(String.valueOf(con[0]));
+                            allc.setText(String.valueOf(con[5]));
                             break;
                         }
                     case R.id.stand:
                         // Y軸の移動距離が大きすぎる場合
                         if (Math.abs(event1.getY() - event2.getY()) > SWIPE_MAX_OFF_PATH) {
+                            con[5]-=con[1];
                             con[1]=0;
                             stac.setText(String.valueOf(con[1]));
+                            allc.setText(String.valueOf(con[5]));
                             break;
                         }
                         // 開始位置から終了位置の移動距離が指定値より大きい
                         // X軸の移動速度が指定値より大きい
                         else if (event1.getX() - event2.getX() > SWIPE_MIN_DISTANCE && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
+                            con[5]-=con[1];
                             con[1]=0;
                             stac.setText(String.valueOf(con[1]));
+                            allc.setText(String.valueOf(con[5]));
                             break;
-
                         }
                         // 終了位置から開始位置の移動距離が指定値より大きい
                         // X軸の移動速度が指定値より大きい
                         else if (event2.getX() - event1.getX() > SWIPE_MIN_DISTANCE && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
+                            con[5]-=con[1];
                             con[1]=0;
                             stac.setText(String.valueOf(con[1]));
+                            allc.setText(String.valueOf(con[5]));
                             break;
                         }
                     case R.id.heal:
                         // Y軸の移動距離が大きすぎる場合
                         if (Math.abs(event1.getY() - event2.getY()) > SWIPE_MAX_OFF_PATH) {
+                            con[5]-=con[2];
                             con[2]=0;
                             healc.setText(String.valueOf(con[2]));
+                            allc.setText(String.valueOf(con[5]));
                             break;
                         }
                         // 開始位置から終了位置の移動距離が指定値より大きい
                         // X軸の移動速度が指定値より大きい
                         else if (event1.getX() - event2.getX() > SWIPE_MIN_DISTANCE && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
+                            con[5]-=con[2];
                             con[2]=0;
                             healc.setText(String.valueOf(con[2]));
+                            allc.setText(String.valueOf(con[5]));
                             break;
-
                         }
                         // 終了位置から開始位置の移動距離が指定値より大きい
                         // X軸の移動速度が指定値より大きい
                         else if (event2.getX() - event1.getX() > SWIPE_MIN_DISTANCE && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
+                            con[5]-=con[2];
                             con[2]=0;
                             healc.setText(String.valueOf(con[2]));
+                            allc.setText(String.valueOf(con[5]));
                             break;
                         }
                     case R.id.draw:
                         // Y軸の移動距離が大きすぎる場合
                         if (Math.abs(event1.getY() - event2.getY()) > SWIPE_MAX_OFF_PATH) {
+                            con[5]-=con[3];
                             con[3]=0;
                             drawc.setText(String.valueOf(con[3]));
+                            allc.setText(String.valueOf(con[5]));
                             break;
                         }
                         // 開始位置から終了位置の移動距離が指定値より大きい
                         // X軸の移動速度が指定値より大きい
                         else if (event1.getX() - event2.getX() > SWIPE_MIN_DISTANCE && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
+                            con[5]-=con[3];
                             con[3]=0;
                             drawc.setText(String.valueOf(con[3]));
+                            allc.setText(String.valueOf(con[5]));
                             break;
-
                         }
                         // 終了位置から開始位置の移動距離が指定値より大きい
                         // X軸の移動速度が指定値より大きい
                         else if (event2.getX() - event1.getX() > SWIPE_MIN_DISTANCE && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
+                            con[5]-=con[3];
                             con[3]=0;
                             drawc.setText(String.valueOf(con[3]));
+                            allc.setText(String.valueOf(con[5]));
                             break;
                         }
                     case R.id.kanga:
@@ -270,28 +294,6 @@ public class MainActivity extends Activity implements View.OnTouchListener{
                         else if (event2.getX() - event1.getX() > SWIPE_MIN_DISTANCE && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
                             con[4]=0;
                             kanc.setText(String.valueOf(con[4]));
-                            break;
-                        }
-                    case R.id.all:
-                        // Y軸の移動距離が大きすぎる場合
-                        if (Math.abs(event1.getY() - event2.getY()) > SWIPE_MAX_OFF_PATH) {
-                            con[5]=0;
-                            allc.setText(String.valueOf(con[5]));
-                            break;
-                        }
-                        // 開始位置から終了位置の移動距離が指定値より大きい
-                        // X軸の移動速度が指定値より大きい
-                        else if (event1.getX() - event2.getX() > SWIPE_MIN_DISTANCE && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
-                            con[5]=0;
-                            allc.setText(String.valueOf(con[5]));
-                            break;
-
-                        }
-                        // 終了位置から開始位置の移動距離が指定値より大きい
-                        // X軸の移動速度が指定値より大きい
-                        else if (event2.getX() - event1.getX() > SWIPE_MIN_DISTANCE && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
-                            con[5]=0;
-                            allc.setText(String.valueOf(con[5]));
                             break;
                         }
                 }
