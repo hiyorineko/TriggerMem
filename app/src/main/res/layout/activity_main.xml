@@ -13,21 +13,16 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/cri"
-        android:layout_marginLeft="42dp"
-        android:layout_marginStart="42dp"
         android:src="@drawable/cri"
-        android:layout_marginTop="50dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="false" />
 
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/heal"
-        android:layout_marginRight="40dp"
         android:src="@drawable/heal"
-        android:layout_marginEnd="40dp"
         android:layout_alignTop="@+id/cri"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
@@ -37,9 +32,9 @@
         android:layout_height="wrap_content"
         android:id="@+id/stand"
         android:src="@drawable/stand"
-        android:layout_centerVertical="true"
-        android:layout_alignLeft="@+id/cri"
-        android:layout_alignStart="@+id/cri" />
+        android:layout_alignTop="@+id/draw"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="false" />
 
     <ImageView
         android:layout_width="wrap_content"
@@ -54,27 +49,26 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/kanga"
-        android:src="@drawable/kangam"
-        android:layout_alignParentBottom="true"
-        android:layout_alignLeft="@+id/stand"
-        android:layout_alignStart="@+id/stand"
-        android:layout_marginBottom="60dp" />
+        android:src="@drawable/kanga"
+        android:layout_alignTop="@+id/all"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/all"
         android:src="@drawable/all"
-        android:layout_alignTop="@+id/kanga"
+        android:layout_alignParentBottom="true"
         android:layout_alignLeft="@+id/draw"
         android:layout_alignStart="@+id/draw" />
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true">
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" >
 
         <TextView
             android:layout_width="wrap_content"
@@ -82,9 +76,7 @@
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="0"
             android:id="@+id/cric"
-            android:layout_marginLeft="73dp"
-            android:layout_marginStart="73dp"
-            android:layout_marginTop="160dp"
+            android:layout_marginTop="106dp"
             android:background="@drawable/cric"
             android:layout_alignParentTop="true"
             android:layout_alignParentLeft="true"
@@ -96,8 +88,8 @@
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="0"
             android:id="@+id/healc"
-            android:layout_marginRight="71dp"
-            android:layout_marginEnd="71dp"
+            android:layout_marginRight="116dp"
+            android:layout_marginEnd="116dp"
             android:background="@drawable/cric"
             android:layout_alignTop="@+id/cric"
             android:layout_alignParentRight="true"
@@ -111,9 +103,9 @@
             android:id="@+id/stac"
             android:background="@drawable/cric"
             android:layout_below="@+id/cric"
-            android:layout_alignLeft="@+id/cric"
-            android:layout_alignStart="@+id/cric"
-            android:layout_marginTop="115dp" />
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="143dp" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -134,8 +126,8 @@
             android:id="@+id/kanc"
             android:background="@drawable/cric"
             android:layout_alignParentBottom="true"
-            android:layout_alignLeft="@+id/stac"
-            android:layout_alignStart="@+id/stac" />
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -143,11 +135,10 @@
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="0"
             android:id="@+id/allc"
-            android:background="@drawable/cric"
-            android:layout_alignParentBottom="true"
+            android:layout_alignTop="@+id/kanc"
             android:layout_alignLeft="@+id/drawc"
-            android:layout_alignStart="@+id/drawc" />
-
+            android:layout_alignStart="@+id/drawc"
+            android:background="@drawable/cric" />
     </RelativeLayout>
 
 </RelativeLayout>

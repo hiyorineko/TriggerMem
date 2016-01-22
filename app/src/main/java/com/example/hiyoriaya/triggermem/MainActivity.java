@@ -10,7 +10,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class MainActivity extends Activity implements View.OnTouchListener,GestureDetector.OnGestureListener{
+public class MainActivity extends Activity implements View.OnTouchListener{
     private ImageView cri;
     private TextView cric;
     private ImageView heal;
@@ -24,15 +24,20 @@ public class MainActivity extends Activity implements View.OnTouchListener,Gestu
     private  ImageView all;
     private TextView allc;
     int[] con;
-    int lastTouchX;
-    int lastTouchY;
-    int currentX;
-    int currentY;
+    // X軸最低スワイプ距離
+    private static final int SWIPE_MIN_DISTANCE = 100;
+    // X軸最低スワイプスピード
+    private static final int SWIPE_THRESHOLD_VELOCITY = 200;
+    // Y軸の移動距離　これ以上なら横移動を判定しない
+    private static final int SWIPE_MAX_OFF_PATH = 250;
+    private GestureDetector mGestureDetector;
+    private int touchid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        mGestureDetector = new GestureDetector(this, mOnGestureListener);
         cri = (ImageView)findViewById(R.id.cri);
         cric= (TextView)findViewById(R.id.cric);
         cri.setOnTouchListener(this);
@@ -83,120 +88,219 @@ public class MainActivity extends Activity implements View.OnTouchListener,Gestu
     }
 
     @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        return mGestureDetector.onTouchEvent(event);
+    }
+
+    @Override
     public boolean onTouch(View v, MotionEvent e) {
+        touchid = v.getId();
+        return mGestureDetector.onTouchEvent(e);
+    }
 
-        switch(e.getAction()){
-            case MotionEvent.ACTION_UP:
-                switch (v.getId()){
-                    case R.id.cri:
-                        if(con[0]<16){
-                            con[0]++;
-                        }else{
-                            con[0]=0;
-                        }
-                        cric.setText(String.valueOf(con[0]));
-                        break;
-                    case R.id.stand:
-                        if(con[1]<16){
-                            con[1]++;
-                        }else{
-                            con[1]=0;
-                        }
-                        stac.setText(String.valueOf(con[1]));
-                        break;
-                    case R.id.heal:
-                        if(con[2]<4){
-                            con[2]++;
-                        }else{
-                            con[2]=0;
-                        }
-                        healc.setText(String.valueOf(con[2]));
-                        break;
-                    case R.id.draw:
-                        if(con[3]<16){
-                            con[3]++;
-                        }else{
-                            con[3]=0;
-                        }
-                        drawc.setText(String.valueOf(con[3]));
-                        break;
-                    case R.id.kanga:
-                        if(con[4]<4){
-                            con[4]++;
-                        }else{
-                            con[4]=0;
-                        }
-                        kanc.setText(String.valueOf(con[4]));
-                        break;
-                    case R.id.all:
-                        if(con[5]<16){
-                            con[5]++;
-                        }else{
-                            con[5]=0;
-                        }
-                        allc.setText(String.valueOf(con[5]));
-                        break;
-
-                    case R.id.cric:
-                            con[0]=0;
-                        cric.setText(String.valueOf(con[0]));
-                        break;
-                    case R.id.stac:
+    private final GestureDetector.SimpleOnGestureListener mOnGestureListener = new GestureDetector.SimpleOnGestureListener() {
+        @Override
+        public boolean onSingleTapUp(MotionEvent e){
+            switch(touchid){
+                case R.id.cri:
+                    if(con[0]<16){
+                        con[0]++;
+                    }else{
+                        con[0]=0;
+                    }
+                    cric.setText(String.valueOf(con[0]));
+                    break;
+                case R.id.stand:
+                    if(con[1]<16){
+                        con[1]++;
+                    }else{
                         con[1]=0;
-                        stac.setText(String.valueOf(con[1]));
-                        break;
-                    case R.id.healc:
+                    }
+                    stac.setText(String.valueOf(con[1]));
+                    break;
+                case R.id.heal:
+                    if(con[2]<4){
+                        con[2]++;
+                    }else{
                         con[2]=0;
-                        healc.setText(String.valueOf(con[2]));
-                        break;
-                    case R.id.drawc:
+                    }
+                    healc.setText(String.valueOf(con[2]));
+                    break;
+                case R.id.draw:
+                    if(con[3]<16){
+                        con[3]++;
+                    }else{
                         con[3]=0;
-                        drawc.setText(String.valueOf(con[3]));
-                        break;
-                    case R.id.kanc:
+                    }
+                    drawc.setText(String.valueOf(con[3]));
+                    break;
+                case R.id.kanga:
+                    if(con[4]<4){
+                        con[4]++;
+                    }else{
                         con[4]=0;
-                        kanc.setText(String.valueOf(con[4]));
-                        break;
-                    case R.id.allc:
+                    }
+                    kanc.setText(String.valueOf(con[4]));
+                    break;
+                case R.id.all:
+                    if(con[5]<16){
+                        con[5]++;
+                    }else{
                         con[5]=0;
-                        allc.setText(String.valueOf(con[5]));
-                        break;
-                }
-                break;
+                    }
+                    allc.setText(String.valueOf(con[5]));
+                    break;
+            }
+            return false;
         }
+        @Override
+        public boolean onFling(MotionEvent event1, MotionEvent event2, float velocityX, float velocityY) {
 
+            try {
+                // 移動距離・スピードを出力
+                float distance_x = Math.abs((event1.getX() - event2.getX()));
+                float velocity_x = Math.abs(velocityX);
 
+                switch(touchid){
+                    case R.id.cri:
+                        // Y軸の移動距離が大きすぎる場合
+                        if (Math.abs(event1.getY() - event2.getY()) > SWIPE_MAX_OFF_PATH) {
+                            con[0]=0;
+                            cric.setText(String.valueOf(con[0]));
+                            break;
+                        }
+                        // 開始位置から終了位置の移動距離が指定値より大きい
+                        // X軸の移動速度が指定値より大きい
+                        else if (event1.getX() - event2.getX() > SWIPE_MIN_DISTANCE && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
+                            con[0]=0;
+                            cric.setText(String.valueOf(con[0]));
+                            break;
 
-        return true;
-    }
+                        }
+                        // 終了位置から開始位置の移動距離が指定値より大きい
+                        // X軸の移動速度が指定値より大きい
+                        else if (event2.getX() - event1.getX() > SWIPE_MIN_DISTANCE && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
+                            con[0]=0;
+                            cric.setText(String.valueOf(con[0]));
+                            break;
+                        }
+                    case R.id.stand:
+                        // Y軸の移動距離が大きすぎる場合
+                        if (Math.abs(event1.getY() - event2.getY()) > SWIPE_MAX_OFF_PATH) {
+                            con[1]=0;
+                            stac.setText(String.valueOf(con[1]));
+                            break;
+                        }
+                        // 開始位置から終了位置の移動距離が指定値より大きい
+                        // X軸の移動速度が指定値より大きい
+                        else if (event1.getX() - event2.getX() > SWIPE_MIN_DISTANCE && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
+                            con[1]=0;
+                            stac.setText(String.valueOf(con[1]));
+                            break;
 
-    @Override
-    public boolean onDown(MotionEvent e) {
-        return false;
-    }
+                        }
+                        // 終了位置から開始位置の移動距離が指定値より大きい
+                        // X軸の移動速度が指定値より大きい
+                        else if (event2.getX() - event1.getX() > SWIPE_MIN_DISTANCE && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
+                            con[1]=0;
+                            stac.setText(String.valueOf(con[1]));
+                            break;
+                        }
+                    case R.id.heal:
+                        // Y軸の移動距離が大きすぎる場合
+                        if (Math.abs(event1.getY() - event2.getY()) > SWIPE_MAX_OFF_PATH) {
+                            con[2]=0;
+                            healc.setText(String.valueOf(con[2]));
+                            break;
+                        }
+                        // 開始位置から終了位置の移動距離が指定値より大きい
+                        // X軸の移動速度が指定値より大きい
+                        else if (event1.getX() - event2.getX() > SWIPE_MIN_DISTANCE && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
+                            con[2]=0;
+                            healc.setText(String.valueOf(con[2]));
+                            break;
 
-    @Override
-    public void onShowPress(MotionEvent e) {
+                        }
+                        // 終了位置から開始位置の移動距離が指定値より大きい
+                        // X軸の移動速度が指定値より大きい
+                        else if (event2.getX() - event1.getX() > SWIPE_MIN_DISTANCE && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
+                            con[2]=0;
+                            healc.setText(String.valueOf(con[2]));
+                            break;
+                        }
+                    case R.id.draw:
+                        // Y軸の移動距離が大きすぎる場合
+                        if (Math.abs(event1.getY() - event2.getY()) > SWIPE_MAX_OFF_PATH) {
+                            con[3]=0;
+                            drawc.setText(String.valueOf(con[3]));
+                            break;
+                        }
+                        // 開始位置から終了位置の移動距離が指定値より大きい
+                        // X軸の移動速度が指定値より大きい
+                        else if (event1.getX() - event2.getX() > SWIPE_MIN_DISTANCE && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
+                            con[3]=0;
+                            drawc.setText(String.valueOf(con[3]));
+                            break;
 
-    }
+                        }
+                        // 終了位置から開始位置の移動距離が指定値より大きい
+                        // X軸の移動速度が指定値より大きい
+                        else if (event2.getX() - event1.getX() > SWIPE_MIN_DISTANCE && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
+                            con[3]=0;
+                            drawc.setText(String.valueOf(con[3]));
+                            break;
+                        }
+                    case R.id.kanga:
+                        // Y軸の移動距離が大きすぎる場合
+                        if (Math.abs(event1.getY() - event2.getY()) > SWIPE_MAX_OFF_PATH) {
+                            con[4]=0;
+                            kanc.setText(String.valueOf(con[4]));
+                            break;
+                        }
+                        // 開始位置から終了位置の移動距離が指定値より大きい
+                        // X軸の移動速度が指定値より大きい
+                        else if (event1.getX() - event2.getX() > SWIPE_MIN_DISTANCE && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
+                            con[4]=0;
+                            kanc.setText(String.valueOf(con[4]));
+                            break;
 
-    @Override
-    public boolean onSingleTapUp(MotionEvent e) {
-        return false;
-    }
+                        }
+                        // 終了位置から開始位置の移動距離が指定値より大きい
+                        // X軸の移動速度が指定値より大きい
+                        else if (event2.getX() - event1.getX() > SWIPE_MIN_DISTANCE && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
+                            con[4]=0;
+                            kanc.setText(String.valueOf(con[4]));
+                            break;
+                        }
+                    case R.id.all:
+                        // Y軸の移動距離が大きすぎる場合
+                        if (Math.abs(event1.getY() - event2.getY()) > SWIPE_MAX_OFF_PATH) {
+                            con[5]=0;
+                            allc.setText(String.valueOf(con[5]));
+                            break;
+                        }
+                        // 開始位置から終了位置の移動距離が指定値より大きい
+                        // X軸の移動速度が指定値より大きい
+                        else if (event1.getX() - event2.getX() > SWIPE_MIN_DISTANCE && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
+                            con[5]=0;
+                            allc.setText(String.valueOf(con[5]));
+                            break;
 
-    @Override
-    public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-        return false;
-    }
+                        }
+                        // 終了位置から開始位置の移動距離が指定値より大きい
+                        // X軸の移動速度が指定値より大きい
+                        else if (event2.getX() - event1.getX() > SWIPE_MIN_DISTANCE && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
+                            con[5]=0;
+                            allc.setText(String.valueOf(con[5]));
+                            break;
+                        }
+                }
 
-    @Override
-    public void onLongPress(MotionEvent e) {
+            } catch (Exception e) {
+                // TODO
+            }
 
-    }
-
-    @Override
-    public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-        return false;
-    }
+            return false;
+        }
+    };
 }
